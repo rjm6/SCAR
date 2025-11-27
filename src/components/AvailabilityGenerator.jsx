@@ -556,9 +556,10 @@ export const AvailabilityGenerator = () => {
 
           <textarea
             value={output}
-            readOnly
+            onChange={(e) => setOutput(e.target.value)}
             rows={12}
-            className="w-full px-4 py-3 border border-gray-300 rounded-md font-mono text-sm bg-gray-50"
+            className="w-full px-4 py-3 border border-gray-300 rounded-md font-mono text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Your availability will appear here..."
           />
         </div>
       )}

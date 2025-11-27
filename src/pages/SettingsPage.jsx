@@ -170,11 +170,8 @@ export const SettingsPage = () => {
         </div>
 
         <div className="bg-white rounded-lg shadow-sm p-8">
-          <div className="flex justify-between items-center mb-6">
+          <div className="mb-6">
             <h2 className="text-2xl font-bold text-gray-900">Settings</h2>
-            {saveMessage && (
-              <span className="text-green-600 font-medium">{saveMessage}</span>
-            )}
           </div>
 
           <div className="space-y-8">
@@ -598,20 +595,28 @@ export const SettingsPage = () => {
             </section>
 
             {/* Action Buttons */}
-            <div className="flex justify-between pt-6 border-t">
-              <button
-                onClick={handleReset}
-                className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
-              >
-                Reset to Defaults
-              </button>
+            <div className="pt-6 border-t space-y-4">
+              {saveMessage && (
+                <div className="bg-green-50 border border-green-200 rounded-md p-3">
+                  <p className="text-green-700 font-medium text-center">{saveMessage}</p>
+                </div>
+              )}
 
-              <button
-                onClick={handleSave}
-                className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-              >
-                Save Settings
-              </button>
+              <div className="flex justify-between">
+                <button
+                  onClick={handleReset}
+                  className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+                >
+                  Reset to Defaults
+                </button>
+
+                <button
+                  onClick={handleSave}
+                  className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                >
+                  Save Settings
+                </button>
+              </div>
             </div>
           </div>
         </div>
