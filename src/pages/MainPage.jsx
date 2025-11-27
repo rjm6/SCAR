@@ -2,20 +2,30 @@ import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 
 export const MainPage = () => {
-  const { user } = useAuth();
+  const { user, accessToken } = useAuth();
   const [testResult, setTestResult] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const testCalendarConnection = async () => {
-    const { testCalendarAccess } = await import('../services/googleCalendar');
-    const { accessToken } = useAuth();
+    setIsLoading(true);
+    setTestResult(null);
 
-    if (!accessToken) {
-      setTestResult({ success: false, error: 'No access token available' });
-      return;
+    try {
+      const { testCalendarAccess } = await import('../services/googleCalendar');
+
+      if (!accessToken) {
+        setTestResult({ success: false, error: 'No access token available' });
+        setIsLoading(false);
+        return;
+      }
+
+      const result = await testCalendarAccess(accessToken);
+      setTestResult(result);
+    } catch (error) {
+      setTestResult({ success: false, error: error.message });
+    } finally {
+      setIsLoading(false);
     }
-
-    const result = await testCalendarAccess(accessToken);
-    setTestResult(result);
   };
 
   return (
@@ -41,9 +51,10 @@ export const MainPage = () => {
               </p>
               <button
                 onClick={testCalendarConnection}
-                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+                disabled={isLoading}
+                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Test Calendar Access
+                {isLoading ? 'Testing...' : 'Test Calendar Access'}
               </button>
 
               {testResult && (
