@@ -283,10 +283,29 @@ export function formatAvailabilityText({
   });
 
   if (includeCalendarLink && calendarLinkFooter) {
-    output += '\n' + calendarLinkFooter;
+    const parsedFooter = parseMarkdownLinks(calendarLinkFooter);
+    output += '\n' + parsedFooter;
   }
 
   return output;
+}
+
+/**
+ * Parse markdown links in text and convert to plain text format
+ * Converts [text](url) to "text: url" for email compatibility
+ */
+function parseMarkdownLinks(text) {
+  // Match markdown links: [text](url)
+  const markdownLinkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+
+  return text.replace(markdownLinkRegex, (match, linkText, url) => {
+    // If the link text is just "link" or similar, just return the URL
+    if (linkText.toLowerCase().trim() === 'link' || linkText.toLowerCase().trim() === 'here') {
+      return url;
+    }
+    // Otherwise format as "text: url"
+    return `${linkText}: ${url}`;
+  });
 }
 
 /**

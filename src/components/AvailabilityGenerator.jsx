@@ -109,9 +109,17 @@ export const AvailabilityGenerator = () => {
     setOutput('');
 
     try {
-      // Validate
-      if (formParams.meetingDuration <= 0) {
+      // Validate numeric fields
+      if (!formParams.meetingDuration || formParams.meetingDuration <= 0) {
         throw new Error('Meeting duration must be greater than 0');
+      }
+
+      if (!formParams.daysToShow || formParams.daysToShow <= 0 || formParams.daysToShow > 20) {
+        throw new Error('Days to show must be between 1 and 20');
+      }
+
+      if (!formParams.daysForward || formParams.daysForward <= 0 || formParams.daysForward > 90) {
+        throw new Error('Days forward to scan must be between 1 and 90');
       }
 
       const selectedDayCount = Object.values(formParams.selectedDays).filter(Boolean).length;
@@ -234,7 +242,7 @@ export const AvailabilityGenerator = () => {
           <input
             type="number"
             value={formParams.meetingDuration}
-            onChange={(e) => handleChange('meetingDuration', parseInt(e.target.value) || 0)}
+            onChange={(e) => handleChange('meetingDuration', e.target.value === '' ? '' : parseInt(e.target.value))}
             min="1"
             className="w-full max-w-xs px-3 py-2 border border-gray-300 rounded-md"
           />
@@ -249,7 +257,7 @@ export const AvailabilityGenerator = () => {
             <input
               type="number"
               value={formParams.daysToShow}
-              onChange={(e) => handleChange('daysToShow', parseInt(e.target.value) || 1)}
+              onChange={(e) => handleChange('daysToShow', e.target.value === '' ? '' : parseInt(e.target.value))}
               min="1"
               max="20"
               className="w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -263,7 +271,7 @@ export const AvailabilityGenerator = () => {
             <input
               type="number"
               value={formParams.daysForward}
-              onChange={(e) => handleChange('daysForward', parseInt(e.target.value) || 1)}
+              onChange={(e) => handleChange('daysForward', e.target.value === '' ? '' : parseInt(e.target.value))}
               min="1"
               max="90"
               className="w-full px-3 py-2 border border-gray-300 rounded-md"
